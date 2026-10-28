@@ -17,7 +17,7 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
       - name: Configure Flutter iOS build
-        run: flutter build ios --config-only --release
+        run: flutter build ios --config-only --release --no-codesign
       - name: Build iOS app without signing
         run: |
           xcodebuild \
