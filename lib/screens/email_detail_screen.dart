@@ -40,9 +40,9 @@ class EmailDetailScreen extends StatelessWidget {
       if (Platform.isLinux || Platform.isWindows || Platform.isMacOS) {
         dir = await getDownloadsDirectory();
       }
-      dir ??= await getApplicationDocumentsDirectory();
+      final downloadDir = dir ?? await getApplicationDocumentsDirectory();
 
-      final filePath = path.join(dir.path, filename);
+      final filePath = path.join(downloadDir.path, filename);
       final file = File(filePath);
       await file.writeAsBytes(bytes);
 
@@ -56,16 +56,16 @@ class EmailDetailScreen extends StatelessWidget {
           action: SnackBarAction(
             label: 'Open Folder',
             onPressed: () async {
-              final uri = Uri.directory(dir!.path);
+              final uri = Uri.directory(downloadDir.path);
               try {
                 if (await canLaunchUrl(uri)) {
                   await launchUrl(uri);
                 } else if (Platform.isLinux) {
-                  await Process.run('xdg-open', [dir.path]);
+                  await Process.run('xdg-open', [downloadDir.path]);
                 } else if (Platform.isWindows) {
-                  await Process.run('explorer.exe', [dir.path]);
+                  await Process.run('explorer.exe', [downloadDir.path]);
                 } else if (Platform.isMacOS) {
-                  await Process.run('open', [dir.path]);
+                  await Process.run('open', [downloadDir.path]);
                 }
               } catch (error) {
                 debugPrint('Error opening folder: $error');
